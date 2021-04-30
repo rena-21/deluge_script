@@ -1,0 +1,35 @@
+First you have to generate the rest api url for the standalone function.
+To enable rest api url, go to: setup - developer space - function - locate the function you created - hover the mouse over it - click the gear icon - select rest api - enable oauth - copy the url - save.
+Now create a connection under setup - developerspace - connection - add connection - zoho oauth - give a name - select scope as zoho.crm.modules.all, zoho.crm.execute function.read/write - click create and connect - copy the connection api name.
+
+Use the below code to invoke the function:
+
+resp = invokeurl
+[
+url: "rest api url of the function"
+type: GET
+parameters: {arg1,arg2,...}
+connection: "xxxxxx"
+];
+
+
+Samples:
+
+Standalone code :
+
+mp = Map();
+mp.put("Last_Name",name);
+create = zoho.crm.createRecord("Contacts",mp);
+return "Success";
+
+Rest Api code:
+
+contname = "Rajesh Contacts";
+resp = invokeurl
+[
+url: "https://crm.zoho.com/crm/v2/functions/untitled_function20/actions/execute?auth_type=oauth"
+type: GET
+parameters: {"name":contname}
+connection: customfunction
+];
+info resp;
