@@ -1,0 +1,21 @@
+
+invoiceID = invoice.get("invoice_id");
+organizationID = organization.get("organization_id");
+sub_total = invoice.get("sub_total");
+adjustment = sub_total.toDecimal() * 0.02 + 10;
+jsonstring = "{\"adjustment\":" + adjustment + ",\"reason\":\" Frais de retard \"}";
+update_invoice = zoho.books.updateRecord("Invoices",organizationID,invoiceID,jsonstring.toMap(),"booksconnections");
+invoice_record = zoho.books.getRecordsByID("invoices",organizationID,invoiceID,"booksconnections").get("invoice");
+email_client = invoice_record.get("email");
+info email_client;
+information = {"send_from_org_email_id":false,"to_mail_ids":{email_client.toString()}};
+data = Map();
+data.put("JSONString",information);
+send_invoice = invokeurl
+[
+	url :"https://books.zoho.com/api/v3/invoices/" + invoiceID + "/email?organization_id=" + organizationID
+	type :POST
+	parameters: data
+	connection:"booksconnections"
+];
+info send_invoice;
